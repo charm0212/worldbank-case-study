@@ -25,8 +25,8 @@ def build_country_code_map():
             name_to_code[name] = code
 
     # Alias mapping to ensure robustness against country name updates
-    if "turkiye" in name_to_code:
-        name_to_code["turkey"] = name_to_code["turkiye"]
+    if "Turkiye" in name_to_code:
+        name_to_code["Turkey"] = name_to_code["Turkiye"]
 
     return name_to_code
 

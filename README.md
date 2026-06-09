@@ -6,7 +6,7 @@ This project is an automated, configuration-driven Python pipeline designed to e
 ---
 
 ### Explanation of the TOML Configuration
-The pipeline is strictly governed by `config.toml`, ensuring zero hardcoded variables within the core Python scripts.
+The core data collection process is governed by config.toml, ensuring that countries, indicators, and time horizons can be modified without changing the ingestion logic.
 * **`[countries]`**: A customizable list of target country names
 * **`[time]`**: Defines the historical extraction horizon (`start_year` and `end_year`)
 * **`[series]`**: Maps World Bank API Indicator Codes to human-readable keys. The pipeline explicitly tracks three core macroeconomic metrics:
