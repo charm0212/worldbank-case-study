@@ -1,0 +1,11 @@
+[countries]
+list = ["Germany", "France", "China"]
+
+[time]
+start_year = 2000
+end_year = 2025
+
+[series]
+industry_value_added_usd_const = "NV.IND.TOTL.KD"
+manufacturing_value_added_usd_const = "NV.IND.MANF.KD"
+gdp_usd_real = "NY.GDP.MKTP.KD"
