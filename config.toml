@@ -1,5 +1,9 @@
 [countries]
-list = ["Germany", "France", "China"]
+list = [
+"Australia", "Belgium", "United States", "Canada", "Mexico", "Brazil",
+"Germany", "France", "Italy", "Denmark", "Finland", "Netherlands",
+"United Kingdom", "South Africa", "China", "Japan", "Turkiye"
+]
 
 [time]
 start_year = 2000
