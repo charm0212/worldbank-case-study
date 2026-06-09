@@ -1,7 +1,7 @@
 # World Bank Data Pipeline & Analysis
 
 ### Project Purpose
-This project is an automated, configuration-driven Python pipeline designed to extract, reshape, and analyze macroeconomic data from the World Bank API. By tracking 17 major economies from 2000 to 2025, the project evaluates real GDP, total industry, and manufacturing value-added to identify structural economic shifts—specifically, signs of global de-industrialization.
+This project is an automated, configuration-driven Python pipeline designed to extract, reshape, and analyze macroeconomic data from the World Bank API. By tracking 17 major economies from 2000 to 2025, the project evaluates real GDP, total industry, and manufacturing value-added to identify structural economic shifts, specifically indicators of global de-industrialization.
 
 ---
 
@@ -16,7 +16,7 @@ The pipeline is strictly governed by `config.toml`, ensuring zero hardcoded vari
 
 ---
 
-### Instructions to Run
+### Instructions to Run the Project
 **Prerequisites:** Python 3.11+ (for native `tomllib` support), `pandas`, and `requests`.
 
 1. **Clone the repository and install dependencies:**
@@ -57,22 +57,21 @@ The pipeline is strictly governed by `config.toml`, ensuring zero hardcoded vari
 
 ### Engineering Assumptions, Limitations & Data Quality
 
-During the implementation of the automation pipeline, several upstream repository anomalies within the World Bank database were observed and defensive-engineered:
+During implementation, several data-quality and metadata issues were identified and handled explicitly within the pipeline.
 
-* **API Optimizations & Source Control (`source=2`):** 
-    - *Issue:* Querying indicators like `NV.IND.MANF.KD` without an explicit database source caused severe data silences (excessive `NaN` gaps) for critical economies, including the USA and China, due to multi-source mixing by the API.
-    - *Solution:* Enforced `&source=2` strictly within the ingestion URL to isolate queries to the core **World Development Indicators (WDI)** database, resolving the omissions.
+* **API Source Selection (`source=2`):** 
+All API requests explicitly specify `source=2` (World Development Indicators, WDI) to ensure that indicators are retrieved from a consistent data source and to reduce potential discrepancies arising from source ambiguity.
 
-* **Data Quality & Schema Mapping (Türkiye):** 
-    - *Issue:* A string mismatch occurred as the live World Bank API registers Turkey under the specific string `"Turkiye"` (without the standard diacritic `ü` or traditional English spelling `Turkey`).
-    - *Solution:* Updated `config.toml` to `"Turkiye"` to keep adjustments configuration-driven. Additionally, introduced defensive string normalization (`.lower().strip()`) and alias mappings in `main.py` to ensure long-term pipeline resilience against naming evolutions.
+* **Country Name Mapping (Turkiye):** 
+The World Bank API registers Turkey under the official country name `Turkiye`, while the assignment configuration originally used `Turkey`. To maintain consistency with the World Bank metadata, the configuration was updated to use `Turkiye`. In addition, an alias mapping was implemented within the pipeline to ensure that both `Turkey` and `Turkiye` resolve to the same ISO country code, improving robustness against naming variations.
 
-* **Severe Institutional Data Omissions (USA & China):** 
-    - *Issue:* Constant USD tracking for Manufacturing Value-Added in both the United States and China contains zero active time-series records except for a single isolated base-year entry in **2015**.
-    - *Solution:* The pipeline cleanly isolates these empty spans into explicit `NaN` values to prevent skewed historical CAGR comparisons and population bias during aggregate statistical calculations.
+* **Data Coverage Gaps (USA & China):** 
+The manufacturing value-added indicator (`NV.IND.MANF.KD`) contains substantial missing observations for some country-year combinations, particularly for the United States and China. Missing observations were preserved as `NaN` values and were not imputed.
 
-* **Upstream Reporting Lags (Japan):** 
-    - *Issue:* While Japan's real GDP is fully reported up to 2024, its industrial and manufacturing indices suffer from an upstream lag and only populate until **2023**.
-    - *Solution:* Built a backward-scanning fallback function that seamlessly tracks this delta, calculating Japan's structural shifts using a truncated 2000–2023 horizon (matching numerator and denominator strictly to the same year) to preserve mathematical validity.
+* **Incomplete Recent-Year Coverage (Japan):** 
+Some Japanese industrial indicators are only available through 2023, while GDP data extends through 2024. The analysis therefore uses the latest available observation for each indicator when calculating shares and growth rates.
+
+* **General Missing-Data Handling**
+Missing observations were retained as `NaN` values throughout the pipeline. Growth rates and share calculations were only computed when sufficient valid observations were available.
 
 

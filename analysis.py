@@ -99,7 +99,7 @@ for country_code in df_wide['country'].unique():
     row[f"manufacturing_cagr_{start_year}_{latest_man_year}"] = calculate_cagr(man_start_value, latest_man_value, start_year, latest_man_year) if latest_man_year else np.nan
     
     summary_rows.append(row)
-
+    
 
 # 5. EXPORT RESULTS
 summary_table = pd.DataFrame(summary_rows)
