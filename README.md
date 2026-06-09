@@ -19,7 +19,7 @@ The pipeline is strictly governed by `config.toml`, ensuring zero hardcoded vari
 
 1. **Clone the repository and install dependencies:**
    ```bash
-   git clone [https://github.com/charm0212/worldbank-case-study.git](https://github.com/charm0212/worldbank-case-study.git)
+   git clone https://github.com/charm0212/worldbank-case-study.git
    pip install pandas requests
    ```
 
