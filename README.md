@@ -3,6 +3,8 @@
 ### Project Purpose
 This project is an automated, configuration-driven Python pipeline designed to extract, reshape, and analyze macroeconomic data from the World Bank API. By tracking 17 major economies from 2000 to 2025, the project evaluates real GDP, total industry, and manufacturing value-added to identify structural economic shifts—specifically, signs of global de-industrialization.
 
+---
+
 ### Explanation of the TOML Configuration
 The pipeline is strictly governed by `config.toml`, ensuring zero hardcoded variables within the core Python scripts.
 * **`[countries]`**: A customizable list of target country names
