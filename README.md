@@ -75,3 +75,33 @@ Some Japanese industrial indicators are only available through 2023, while GDP d
 Missing observations were retained as `NaN` values throughout the pipeline. Growth rates and share calculations were only computed when sufficient valid observations were available.
 
 
+===
+
+### Enhancements (12.06.2026)
+
+The core data pipeline has been refactored to make the data collection pipeline more robust and flexible.
+The architecture now explicitly implements the following python patterns:
+
+1. **Exception Handling (`try-except-els`)**
+Added structured exception handling around:
+
+* Configuration loading
+* World Bank API requests
+* Output file generation
+
+This prevents unexpected interruptions caused by missing files, network issues, or write failures and ensures that downstream operations only proceed when previous steps complete successfully.
+
+2. **Flexible Function Parameters (`*args` & `**kwargs`)**
+Refactored `fetch_indicator` to support more flexible inputs:
+* **`*indicator_codes` (`*args`)** allows multiple indicator codes to be passed dynamically without changing the function signature.
+* **`**kwargs`** enables optional runtime parameters such as custom pagination settings or alternative data sources.
+
+This makes the pipeline easier to extend when adding new indicators or modifying API behavior.
+
+3. **Improved API Resilience**
+Added several safeguards to improve stability when interacting with the World Bank API:
+* URL encoding via `urllib.parse.quote()` for indicator identifiers.
+* Retry mechanism `(max_retries=3)` for temporary request failures.
+* Request timeouts and graceful skipping of failed requests.
+
+These changes help maintain pipeline continuity even when individual API calls encounter temporary issues.
